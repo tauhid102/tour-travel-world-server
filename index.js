@@ -26,8 +26,9 @@ async function run(){
         });
         //add service
         app.post('/services',async(req,res)=>{
-            const query=req.body;
-            console.log(query);
+            const service=req.body;
+            const result = await serviceCollection.insertOne(service);
+            res.json(result);
         })
         //fetch by id
         app.get('/services/:id', async (req, res) => {
