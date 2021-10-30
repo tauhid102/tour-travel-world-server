@@ -38,16 +38,20 @@ async function run() {
             console.log('load', id);
             res.send(result);
         });
+        //get booking
+        app.get('/booking/admin', async (req, res) => {
+            const cursor = bookingCollection.find({});
+            const services = await cursor.toArray();
+            res.send(services);
+        });
         //
         app.get('/booking', async (req, res) => {
-            const email = req.query.query;
-            console.log(email);
-            const query = { runtime: { $lt: 15 } };
-            const querys = { email:email }
-            const result = await bookingCollection.find(query, querys);
-            // console.log('load', result);
+            const email = req.query.email;
+            const query = { "email": email }
+            const result = await bookingCollection.find(query).toArray();
             res.json(result);
         });
+        
         //add booking
         app.post('/booking', async (req, res) => {
             const booking = req.body;
@@ -55,16 +59,11 @@ async function run() {
             console.log('booking', booking);
             res.json(result);
         });
-        //get booking
-        app.get('/booking', async (req, res) => {
-            const cursor = bookingCollection.find({});
-            const services = await cursor.toArray();
-            res.send(services);
-        });
+
         //delete api
-        app.delete('/booking/:id',async(req,res)=>{
-            const id =req.params.id;
-            const query={ _id: ObjectId(id) }
+        app.delete('/booking/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
             const result = await bookingCollection.deleteOne(query);
             res.json(result)
         })
