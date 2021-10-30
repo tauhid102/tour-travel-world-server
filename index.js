@@ -18,11 +18,17 @@ async function run(){
         await client.connect();
         const database = client.db('tour-services');
         const serviceCollection = database.collection('services');
+        const bookingCollection = database.collection('booking');
         app.get('/services',async(req,res)=>{
             const cursor=serviceCollection.find({});
             const services= await cursor.toArray();
             res.send(services);
         });
+        //add service
+        app.post('/services',async(req,res)=>{
+            const query=req.body;
+            console.log(query);
+        })
         //fetch by id
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
@@ -30,6 +36,13 @@ async function run(){
             const result = await serviceCollection.findOne(query);
             console.log('load', id);
             res.send(result);
+        });
+        //add booking
+        app.post('/booking',async(req,res)=>{
+            const booking = req.body;
+            const result = await bookingCollection.insertOne(booking);
+            console.log('booking',booking);
+            res.json(result);
         })
     }
     finally{
