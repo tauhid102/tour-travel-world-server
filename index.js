@@ -51,7 +51,14 @@ async function run() {
             const result=await bookingCollection.updateOne(query,updateDoc);
             res.json(result);
             console.log(result);
-        })
+        });   
+        app.get('/booking', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email }
+            const result = await bookingCollection.find(query).toArray();
+            res.json(result);
+            console.log(result);
+        }); 
         //get booking
         app.get('/booking/admin', async (req, res) => {
             const cursor = bookingCollection.find({});
@@ -59,18 +66,13 @@ async function run() {
             res.send(services);
         });
         //
-        app.get('/booking', async (req, res) => {
-            const email = req.query.email;
-            const query = { "email": email }
-            const result = await bookingCollection.find(query).toArray();
-            res.json(result);
-        });
+        
+        
         
         //add booking
         app.post('/booking', async (req, res) => {
             const booking = req.body;
             const result = await bookingCollection.insertOne(booking);
-            console.log('booking', booking);
             res.json(result);
         });
 
