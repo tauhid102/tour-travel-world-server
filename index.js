@@ -38,6 +38,20 @@ async function run() {
             console.log('load', id);
             res.send(result);
         });
+        //update
+        app.put('/booking/admin/:id',async(req,res)=>{
+            const id = req.params.id;
+            console.log(id);
+            const query = { _id: ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                  "status": "Accepted"
+                },
+              };
+            const result=await bookingCollection.updateOne(query,updateDoc);
+            res.json(result);
+            console.log(result);
+        })
         //get booking
         app.get('/booking/admin', async (req, res) => {
             const cursor = bookingCollection.find({});
